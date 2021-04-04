@@ -9,8 +9,9 @@ spec:
   type: ClusterIP
   selector:
     app: kubestriker
+    component: database
   ports:
-    - port: 80
+    - port: 8000
       protocol: TCP
       targetPort: 8000
       name: db-service
