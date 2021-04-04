@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubestriker-svc
+  labels:
+    name: kubestriker
+    app: kubestriker
+spec:
+  type: ClusterIP
+  selector:
+    app: kubestriker
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8000
+      name: kubestriker-svc
