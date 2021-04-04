@@ -65,7 +65,7 @@ spec:
               mountPath: /data
               subPath: data
           ports:
-            - name: kubestriker-svc
+            - name: db-service
               containerPort: 8000
               protocol: "TCP"
           # livenessProbe:

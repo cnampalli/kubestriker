@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubestriker-svc
+  name: db-service
   labels:
     name: kubestriker
     app: kubestriker
@@ -13,4 +13,4 @@ spec:
     - port: 80
       protocol: TCP
       targetPort: 8000
-      name: kubestriker-svc
+      name: db-service

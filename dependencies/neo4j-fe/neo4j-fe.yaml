@@ -39,7 +39,7 @@ spec:
           emptyDir: {}
       containers:
         - name: neo4j-fe
-          image: "cloudsecguy/python:chai"
+          image: "cloudsecguy/neo4jreact:chai"
           env:
             - name: ADVERTISE_IP
               valueFrom:
