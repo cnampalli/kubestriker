@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubestriker-python
+  name: kubestriker-fe
   namespace: kubestriker
   labels:
     app: kubestriker
     release: kubestriker
-    component: server
+    component: frontend-server
 spec:
   # serviceName: "kubestriker-python-svc"
   replicas: 1
@@ -14,15 +14,13 @@ spec:
     matchLabels:
       app: kubestriker
       release: kubestriker
-      component: server
-      # hasDNS: "true"
+      component: frontend-server
   template:
     metadata:
       labels:
         app: kubestriker
         release: kubestriker
-        component: server
-        # hasDNS: "true"
+        component: frontend-server
     spec:
       affinity:
         podAntiAffinity:
@@ -31,16 +29,16 @@ spec:
                 matchLabels:
                   app: kubestriker
                   release: "kubestriker"
-                  component: server
+                  component: frontend-server
               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 60
-      # serviceAccountName: consul-dev-server
+      # serviceAccountName: consul-dev-frontend-server
       volumes:
         - name: kubestriker-python-storage
           emptyDir: {}
       containers:
         - name: kubestriker-python
-          image: "cloudsecguy/python:chai"
+          image: "cloudsecguy/kubestrikerfe:env6"
           env:
             - name: ADVERTISE_IP
               valueFrom:
@@ -54,24 +52,18 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: DYNAMODB_URL
-              value: "http://$(DB_SERVICE_SERVICE_HOST):$(DB_SERVICE_SERVICE_PORT)"
-            - name: DYNAMODB_ACCESS_KEY_ID
-              value: "anything"
-            - name: DYNAMODB_ACCESS_KEY
-              value: "anything"
-            - name: DYNAMODB_REGION
-              value: "ap-southeast-2"
+            - name: API_URL
+              value: "http://192.168.18.107:8888/"
           volumeMounts:
             - name: kubestriker-python-storage
               mountPath: /data
               subPath: data
           ports:
-            - name: python-expose
-              containerPort: 8888
+            - name: kubestriker-fe
+              containerPort: 80
               protocol: "TCP"
-            - name: db-expose
-              containerPort: 8000
+            - name: python-server
+              containerPort: 8888
               protocol: "TCP"
           # livenessProbe:
           #   tcpSocket:

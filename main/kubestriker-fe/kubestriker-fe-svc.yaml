@@ -1,18 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-svc
+  name: fe-svc
   labels:
     name: kubestriker
     app: kubestriker
-    component: server
+    component: frontend-server
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: kubestriker
-    component: server
+    component: frontend-server
   ports:
-    - port: 8888
+    - port: 8080
       protocol: TCP
-      targetPort: 8888
-      name: python-svc
+      targetPort: 80
+      name: ks-fe-svc

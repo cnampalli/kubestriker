@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dependent-envars-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubestriker
+      release: kubestriker
+      hasDNS: "true"
+  template:
+    metadata:
+      labels:
+        app: kubestriker
+        release: kubestriker
+        hasDNS: "true"
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: dependent-envars-demo
+          args:
+            - while true; do echo -en '\n'; printf UNCHANGED_REFERENCE=$UNCHANGED_REFERENCE'\n'; printf SERVICE_ADDRESS=$SERVICE_ADDRESS'\n';printf ESCAPED_REFERENCE=$ESCAPED_REFERENCE'\n'; sleep 30; done;
+          command:
+            - sh
+            - -c
+          image: busybox
+          env:
+            - name: SERVICE_PORT
+              value: $(NEO4J_SERVICE_PORT_7474_TCP)
+            - name: SERVICE_IP
+              value: "$(NEO4J_SERVICE_PORT_7687_TCP)"
+            - name: UNCHANGED_REFERENCE
+              value: "$(DB_SERVICE_PORT_8000_TCP)"
+
